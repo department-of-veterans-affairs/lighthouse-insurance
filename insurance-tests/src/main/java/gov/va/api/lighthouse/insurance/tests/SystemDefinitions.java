@@ -3,9 +3,8 @@ package gov.va.api.lighthouse.insurance.tests;
 import gov.va.api.health.sentinel.Environment;
 import gov.va.api.health.sentinel.SentinelProperties;
 import gov.va.api.health.sentinel.ServiceDefinition;
-import lombok.experimental.UtilityClass;
-
 import java.util.Optional;
+import lombok.experimental.UtilityClass;
 
 @UtilityClass
 class SystemDefinitions {

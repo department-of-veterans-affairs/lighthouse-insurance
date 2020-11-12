@@ -7,6 +7,6 @@ import lombok.Value;
 @Value
 @Builder
 public class TestIds {
-    @NonNull String coverage;
-    @NonNull String patient;
+  @NonNull String coverage;
+  @NonNull String patient;
 }

@@ -9,7 +9,7 @@ import lombok.Value;
 @Builder
 public class SystemDefinition {
 
-    @NonNull ServiceDefinition insurance;
+  @NonNull ServiceDefinition insurance;
 
-    @NonNull TestIds testIds;
+  @NonNull TestIds testIds;
 }

@@ -5,9 +5,8 @@ import static gov.va.api.lighthouse.insurance.tests.SystemDefinitions.systemDefi
 import gov.va.api.health.autoconfig.configuration.JacksonConfig;
 import gov.va.api.health.sentinel.FhirTestClient;
 import gov.va.api.health.sentinel.TestClient;
-import lombok.experimental.UtilityClass;
-
 import java.util.List;
+import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class TestClients {
@@ -19,5 +18,5 @@ public class TestClients {
         .errorResponseEqualityCheck(
             new gov.va.api.lighthouse.insurance.tests.OperationOutcomesAreFunctionallyEqual())
         .build();
-        }
+  }
 }
