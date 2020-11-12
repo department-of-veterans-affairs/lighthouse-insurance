@@ -46,7 +46,10 @@ public class InsuranceController {
                 .reference(basepath + "r4/Patient/" + patientID)
                 .display("JOHN Q VETERAN")
                 .build())
-        .relationship(CodeableConcept.builder().build())
+        .relationship(
+            CodeableConcept.builder()
+                .coding(List.of(Coding.builder().code("self").build()))
+                .build())
         .payor(
             List.of(
                 Reference.builder()
@@ -56,7 +59,7 @@ public class InsuranceController {
         .coverageClass(
             List.of(
                 Coverage.CoverageClass.builder()
-                        .id("I2-2PQBLFRZ0319NWO5JRPVQIY1IP000010")
+                    .id("I2-2PQBLFRZ0319NWO5JRPVQIY1IP000010")
                     .type(
                         CodeableConcept.builder()
                             .coding(List.of(Coding.builder().code("group").build()))
