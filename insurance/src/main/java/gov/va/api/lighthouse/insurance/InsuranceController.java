@@ -56,11 +56,12 @@ public class InsuranceController {
         .coverageClass(
             List.of(
                 Coverage.CoverageClass.builder()
+                        .id("I2-2PQBLFRZ0319NWO5JRPVQIY1IP000010")
                     .type(
                         CodeableConcept.builder()
-                            .coding(List.of(Coding.builder().code("CCGroup").build()))
+                            .coding(List.of(Coding.builder().code("group").build()))
                             .build())
-                    .value("CCValue")
+                    .value("GroupValue")
                     .build()))
         .order(1)
         .costToBeneficiary(
