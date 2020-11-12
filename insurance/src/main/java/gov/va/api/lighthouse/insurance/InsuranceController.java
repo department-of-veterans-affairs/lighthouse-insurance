@@ -2,8 +2,12 @@ package gov.va.api.lighthouse.insurance;
 
 import gov.va.api.health.r4.api.bundle.AbstractBundle;
 import gov.va.api.health.r4.api.bundle.BundleLink;
+import gov.va.api.health.r4.api.datatypes.CodeableConcept;
+import gov.va.api.health.r4.api.datatypes.Money;
 import gov.va.api.health.r4.api.elements.Reference;
 import gov.va.api.health.r4.api.resources.Coverage;
+
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -32,22 +36,31 @@ public class InsuranceController {
   Coverage buildCoverage() {
     String coverageID = "I2-8TQPWFRZ4792KNR6KLYYYHA5RY000289";
     String patientID = "1092387456V321456";
-    String organizationID = "I2-1PQBLFRZ6207KNR9KLJTLHA5RY000903";
     return Coverage.builder()
         .resourceType("Coverage")
         .id(coverageID)
         .status(Coverage.Status.active)
+            .subscriberId("I2-9HRPVUQL0289KNR9KLJTLHA5RY000481")
         .beneficiary(
             Reference.builder()
                 .reference(basepath + "r4/Patient/" + patientID)
                 .display("JOHN Q VETERAN")
                 .build())
+            .relationship(CodeableConcept.builder().build())
         .payor(
             List.of(
                 Reference.builder()
-                    .reference("r4/Organization/" + organizationID)
+                    .reference("r4/Organization/I2-1PQBLFRZ6207KNR9KLJTLHA5RY000903")
                     .display("EXH INSURANCE")
                     .build()))
+            .coverageClass(List.of(Coverage.CoverageClass.builder().build()))
+            .order(1)
+            .costToBeneficiary(List.of(
+                    Coverage.CostToBeneficiary.builder()
+                            .id("I2-7QTRSBNY6915LWV0KLJTLHA4PL000366")
+                            .valueMoney(Money.builder().currency("USD").value(BigDecimal.valueOf(100)).build())
+                            .build()
+            ))
         .build();
   }
 
