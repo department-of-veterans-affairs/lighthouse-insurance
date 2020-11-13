@@ -34,16 +34,14 @@ public class InsuranceController {
 
   @SneakyThrows
   Coverage buildCoverage() {
-    String coverageID = "I2-8TQPWFRZ4792KNR6KLYYYHA5RY000289";
-    String patientID = "1092387456V321456";
     return Coverage.builder()
         .resourceType("Coverage")
-        .id(coverageID)
+        .id("I2-8TQPWFRZ4792KNR6KLYYYHA5RY000289")
         .status(Coverage.Status.active)
         .subscriberId("I2-9HRPVUQL0289KNR9KLJTLHA5RY000481")
         .beneficiary(
             Reference.builder()
-                .reference(basepath + "r4/Patient/" + patientID)
+                .reference(basepath + "r4/Patient/1092387456V321456")
                 .display("JOHN Q VETERAN")
                 .build())
         .relationship(
