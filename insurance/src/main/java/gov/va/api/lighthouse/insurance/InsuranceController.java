@@ -46,7 +46,13 @@ public class InsuranceController {
                 .build())
         .relationship(
             CodeableConcept.builder()
-                .coding(List.of(Coding.builder().code("self").build()))
+                .coding(
+                    List.of(
+                        Coding.builder()
+                            .system("http://terminology.hl7.org/CodeSystem/subscriber-relationship")
+                            .code("self")
+                            .display("Self")
+                            .build()))
                 .build())
         .payor(
             List.of(
@@ -59,7 +65,14 @@ public class InsuranceController {
                 Coverage.CoverageClass.builder()
                     .type(
                         CodeableConcept.builder()
-                            .coding(List.of(Coding.builder().code("group").build()))
+                            .coding(
+                                List.of(
+                                    Coding.builder()
+                                        .system(
+                                            "http://terminology.hl7.org/CodeSystem/coverage-class")
+                                        .code("group")
+                                        .display("Group")
+                                        .build()))
                             .build())
                     .value("Group")
                     .build()))
@@ -69,7 +82,14 @@ public class InsuranceController {
                 Coverage.CostToBeneficiary.builder()
                     .type(
                         CodeableConcept.builder()
-                            .coding(List.of(Coding.builder().code("gpvisit").build()))
+                            .coding(
+                                List.of(
+                                    Coding.builder()
+                                        .system(
+                                            "http://terminology.hl7.org/CodeSystem/coverage-copay-type")
+                                        .code("gpvisit")
+                                        .display("GP Office Visit")
+                                        .build()))
                             .build())
                     .valueMoney(
                         Money.builder().currency("USD").value(BigDecimal.valueOf(100)).build())
