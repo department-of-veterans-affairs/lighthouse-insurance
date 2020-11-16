@@ -61,13 +61,16 @@ public class InsuranceController {
                         CodeableConcept.builder()
                             .coding(List.of(Coding.builder().code("group").build()))
                             .build())
-                    .value("GroupValue")
+                    .value("Group")
                     .build()))
         .order(1)
         .costToBeneficiary(
             List.of(
                 Coverage.CostToBeneficiary.builder()
-                    .id("I2-7QTRSBNY6915LWV0KLJTLHA4PL000366")
+                    .type(
+                        CodeableConcept.builder()
+                            .coding(List.of(Coding.builder().code("gpvisit").build()))
+                            .build())
                     .valueMoney(
                         Money.builder().currency("USD").value(BigDecimal.valueOf(100)).build())
                     .build()))
