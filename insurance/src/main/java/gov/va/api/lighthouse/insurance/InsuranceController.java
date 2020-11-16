@@ -51,13 +51,12 @@ public class InsuranceController {
         .payor(
             List.of(
                 Reference.builder()
-                    .reference("r4/Organization/I2-1PQBLFRZ6207KNR9KLJTLHA5RY000903")
+                    .reference(basepath + "r4/Organization/I2-1PQBLFRZ6207KNR9KLJTLHA5RY000903")
                     .display("EXH INSURANCE")
                     .build()))
         .coverageClass(
             List.of(
                 Coverage.CoverageClass.builder()
-                    .id("I2-2PQBLFRZ0319NWO5JRPVQIY1IP000010")
                     .type(
                         CodeableConcept.builder()
                             .coding(List.of(Coding.builder().code("group").build()))
