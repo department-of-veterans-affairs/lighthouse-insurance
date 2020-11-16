@@ -30,11 +30,6 @@
       <artifactId>us-core-r4</artifactId>
       <version>${fhir-resources.version}</version>
     </dependency>
-    <dependency>
-      <groupId>gov.va.api.health</groupId>
-      <artifactId>sentinel</artifactId>
-      <version>${project.parent.version}</version>
-    </dependency>
   </dependencies>
   <build>
     <plugins>

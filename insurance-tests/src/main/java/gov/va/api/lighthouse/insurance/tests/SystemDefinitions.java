@@ -11,7 +11,7 @@ class SystemDefinitions {
   private static SystemDefinition lab() {
     String url = "https://sandbox-api.va.gov";
     return SystemDefinition.builder()
-        .insurance(serviceDefinition("insurance", url, 443, null, "/insurance/r4/"))
+        .insurance(serviceDefinition("insurance", url, 443, null, "/services/fhir/v0/r4/"))
         .testIds(testIds())
         .build();
   }
@@ -27,7 +27,7 @@ class SystemDefinitions {
   private static SystemDefinition qa() {
     String url = "https://blue.qa.lighthouse.va.gov";
     return SystemDefinition.builder()
-        .insurance(serviceDefinition("insurance", url, 443, null, "/insurance/r4/"))
+        .insurance(serviceDefinition("insurance", url, 443, null, "/fhir/v0/r4/"))
         .testIds(testIds())
         .build();
   }
@@ -45,7 +45,7 @@ class SystemDefinitions {
   private static SystemDefinition stagingLab() {
     String url = "https://blue.staging-lab.lighthouse.va.gov";
     return SystemDefinition.builder()
-        .insurance(serviceDefinition("insurance", url, 443, null, "/insurance/r4/"))
+        .insurance(serviceDefinition("insurance", url, 443, null, "/fhir/v0/r4/"))
         .testIds(testIds())
         .build();
   }
