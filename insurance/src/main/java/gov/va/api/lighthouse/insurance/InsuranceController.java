@@ -38,7 +38,12 @@ public class InsuranceController {
         .resourceType("Coverage")
         .id("I2-8TQPWFRZ4792KNR6KLYYYHA5RY000289")
         .status(Coverage.Status.active)
-        .subscriberId("I2-9HRPVUQL0289KNR9KLJTLHA5RY000481")
+        .subscriber(
+            Reference.builder()
+                .reference(basepath + "r4/Patient/1092387456V321456")
+                .display("JOHN Q VETERAN")
+                .id("1092387456V321456")
+                .build())
         .beneficiary(
             Reference.builder()
                 .reference(basepath + "r4/Patient/1092387456V321456")
