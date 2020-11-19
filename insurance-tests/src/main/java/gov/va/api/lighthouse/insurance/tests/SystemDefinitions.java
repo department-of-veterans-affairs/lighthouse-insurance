@@ -34,12 +34,13 @@ class SystemDefinitions {
 
   private static ServiceDefinition serviceDefinition(
       String name, String url, int port, String accessToken, String apiPath) {
-    return ServiceDefinition.builder()
-        .url(SentinelProperties.optionUrl(name, url))
-        .port(port)
+    return SentinelProperties.forName(name)
         .accessToken(() -> Optional.ofNullable(accessToken))
-        .apiPath(SentinelProperties.optionApiPath(name, apiPath))
-        .build();
+        .defaultPort(port)
+        .defaultApiPath(apiPath)
+        .defaultUrl(url)
+        .build()
+        .serviceDefinition();
   }
 
   private static SystemDefinition stagingLab() {
