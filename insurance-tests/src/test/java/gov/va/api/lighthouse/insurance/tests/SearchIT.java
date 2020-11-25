@@ -10,7 +10,7 @@ import gov.va.api.health.sentinel.TestClient;
 import org.junit.jupiter.api.Test;
 
 public class SearchIT {
-  public void checkResponse(String endpoint, Class expectedClass) {
+  public void checkResponse(String endpoint, Class<?> expectedClass) {
     TestClient ftc = r4Scheduling();
     String apiPath = ftc.service().urlWithApiPath();
     ExpectedResponse response = ftc.get(apiPath + endpoint);
