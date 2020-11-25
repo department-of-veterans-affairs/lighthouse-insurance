@@ -1,19 +1,20 @@
 package gov.va.api.lighthouse.insurance.tests;
 
+import static gov.va.api.health.sentinel.SentinelProperties.magicAccessToken;
+
 import gov.va.api.health.sentinel.Environment;
 import gov.va.api.health.sentinel.SentinelProperties;
 import gov.va.api.health.sentinel.ServiceDefinition;
 import java.util.Optional;
 import lombok.experimental.UtilityClass;
 
-import static gov.va.api.health.sentinel.SentinelProperties.magicAccessToken;
-
 @UtilityClass
 class SystemDefinitions {
   private static SystemDefinition lab() {
     String url = "https://sandbox-api.va.gov";
     return SystemDefinition.builder()
-        .insurance(serviceDefinition("insurance", url, 443, magicAccessToken(), "/services/fhir/v0/r4/"))
+        .insurance(
+            serviceDefinition("insurance", url, 443, magicAccessToken(), "/services/fhir/v0/r4/"))
         .testIds(testIds())
         .build();
   }
@@ -38,7 +39,7 @@ class SystemDefinitions {
       String name, String url, int port, String accessToken, String apiPath) {
     return SentinelProperties.forName(name)
         .accessToken(() -> Optional.ofNullable(accessToken))
-            .defaultUrl(url)
+        .defaultUrl(url)
         .defaultPort(port)
         .defaultApiPath(apiPath)
         .defaultUrl(url)
