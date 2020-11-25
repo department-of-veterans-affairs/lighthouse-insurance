@@ -74,7 +74,7 @@ class SystemDefinitions {
   private static TestIds testIds() {
     return TestIds.builder()
         .coverage("I2-8TQPWFRZ4792KNR6KLYYYHA5RY000289")
-        .patient("1092387456V321456")
+        .patient("1011537977V693883")
         // Frankenpatient
         .oauthPatient("1017283180V801730")
         .build();
