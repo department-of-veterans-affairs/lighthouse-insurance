@@ -9,7 +9,7 @@
   </parent>
   <groupId>gov.va.api.lighthouse</groupId>
   <artifactId>insurance</artifactId>
-  <version>0.0.4-SNAPSHOT</version>
+  <version>0.0.4</version>
   <packaging>jar</packaging>
   <properties>
     <docker.imageName>lighthouse-${project.artifactId}</docker.imageName>
