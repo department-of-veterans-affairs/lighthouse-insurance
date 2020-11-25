@@ -6,12 +6,14 @@ import gov.va.api.health.sentinel.ServiceDefinition;
 import java.util.Optional;
 import lombok.experimental.UtilityClass;
 
+import static gov.va.api.health.sentinel.SentinelProperties.magicAccessToken;
+
 @UtilityClass
 class SystemDefinitions {
   private static SystemDefinition lab() {
     String url = "https://sandbox-api.va.gov";
     return SystemDefinition.builder()
-        .insurance(serviceDefinition("insurance", url, 443, null, "/services/fhir/v0/r4/"))
+        .insurance(serviceDefinition("insurance", url, 443, magicAccessToken(), "/services/fhir/v0/r4/"))
         .testIds(testIds())
         .build();
   }
@@ -27,7 +29,7 @@ class SystemDefinitions {
   private static SystemDefinition qa() {
     String url = "https://blue.qa.lighthouse.va.gov";
     return SystemDefinition.builder()
-        .insurance(serviceDefinition("insurance", url, 443, null, "/fhir/v0/r4/"))
+        .insurance(serviceDefinition("insurance", url, 443, magicAccessToken(), "/fhir/v0/r4/"))
         .testIds(testIds())
         .build();
   }
@@ -36,6 +38,7 @@ class SystemDefinitions {
       String name, String url, int port, String accessToken, String apiPath) {
     return SentinelProperties.forName(name)
         .accessToken(() -> Optional.ofNullable(accessToken))
+            .defaultUrl(url)
         .defaultPort(port)
         .defaultApiPath(apiPath)
         .defaultUrl(url)
@@ -46,7 +49,7 @@ class SystemDefinitions {
   private static SystemDefinition stagingLab() {
     String url = "https://blue.staging-lab.lighthouse.va.gov";
     return SystemDefinition.builder()
-        .insurance(serviceDefinition("insurance", url, 443, null, "/fhir/v0/r4/"))
+        .insurance(serviceDefinition("insurance", url, 443, magicAccessToken(), "/fhir/v0/r4/"))
         .testIds(testIds())
         .build();
   }
@@ -71,6 +74,8 @@ class SystemDefinitions {
     return TestIds.builder()
         .coverage("I2-8TQPWFRZ4792KNR6KLYYYHA5RY000289")
         .patient("1092387456V321456")
+        // Frankenpatient
+        .oauthPatient("1017283180V801730")
         .build();
   }
 }
