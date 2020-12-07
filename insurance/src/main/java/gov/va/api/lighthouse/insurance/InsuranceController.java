@@ -109,7 +109,7 @@ public class InsuranceController {
   /** Read coverage by ID. */
   @GetMapping(value = "/{id}")
   Coverage readCoverageId(@PathVariable("id") String id) {
-    if (!id.equals("I2-8TQPWFRZ4792KNR6KLYYYHA5RY000289")) {
+    if (!"I2-8TQPWFRZ4792KNR6KLYYYHA5RY000289".equals(id)) {
       throw new HttpClientErrorException(HttpStatus.NOT_FOUND);
     }
     return buildCoverage();
@@ -121,6 +121,9 @@ public class InsuranceController {
       @RequestParam(value = "_id", required = false) String id,
       @RequestParam(value = "patient", required = false) String patient,
       @RequestParam(value = "identifier", required = false) String identifier) {
+    if (id != null && !"I2-8TQPWFRZ4792KNR6KLYYYHA5RY000289".equals(id)) {
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
     Coverage coverage = buildCoverage();
     var queryString =
         StubbedQueryStringBuilder.builder()
@@ -129,9 +132,6 @@ public class InsuranceController {
             .pat(Optional.ofNullable(patient))
             .build()
             .toStubbedQueryString();
-    if (id != null && !id.equals("I2-8TQPWFRZ4792KNR6KLYYYHA5RY000289")) {
-      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
     return Coverage.Bundle.builder()
         .link(
             Arrays.asList(
