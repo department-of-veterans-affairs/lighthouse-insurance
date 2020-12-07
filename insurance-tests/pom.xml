@@ -77,6 +77,7 @@
                 <argument>-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5090</argument>
                 <argument>-cp</argument>
                 <argument>insurance.jar</argument>
+                <argument>-Dinsurance.public-web-exception-key=-shanktopus-for-the-win-</argument>
                 <argument>-Dlogging.level.root=INFO</argument>
                 <argument>-Dloader=gov.va.api.lighthouse.insurance.Application</argument>
                 <argument>-Dspring.config.location=classpath:/application.properties,file:${project.basedir}/config/secrets.properties</argument>

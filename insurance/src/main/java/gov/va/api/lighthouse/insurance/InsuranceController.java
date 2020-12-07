@@ -14,11 +14,14 @@ import java.util.Optional;
 import lombok.Builder;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping(
@@ -106,6 +109,9 @@ public class InsuranceController {
   /** Read coverage by ID. */
   @GetMapping(value = "/{id}")
   Coverage readCoverageId(@PathVariable("id") String id) {
+    if (!id.equals("I2-8TQPWFRZ4792KNR6KLYYYHA5RY000289")) {
+      throw new HttpClientErrorException(HttpStatus.NOT_FOUND);
+    }
     return buildCoverage();
   }
 
@@ -123,6 +129,9 @@ public class InsuranceController {
             .pat(Optional.ofNullable(patient))
             .build()
             .toStubbedQueryString();
+    if (id != null && !id.equals("I2-8TQPWFRZ4792KNR6KLYYYHA5RY000289")) {
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
     return Coverage.Bundle.builder()
         .link(
             Arrays.asList(
