@@ -20,5 +20,11 @@ public class PathRewriteConfigTest {
     assertThat(
         restTemplate.getForObject(
             "http://localhost:" + port + "/insurance/r4/Coverage/123", Coverage.class));
+    assertThat(
+        restTemplate.getForObject(
+            "http://localhost:" + port + "/services/fhir/v0/r4/Coverage/123", Coverage.class));
+    assertThat(
+        restTemplate.getForObject(
+            "http://localhost:" + port + "/fhir/v0/r4/Coverage/123", Coverage.class));
   }
 }

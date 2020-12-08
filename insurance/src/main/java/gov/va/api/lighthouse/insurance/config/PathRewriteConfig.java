@@ -10,7 +10,12 @@ public class PathRewriteConfig {
   @Bean
   FilterRegistrationBean<PathRewriteFilter> patientRegistrationFilter() {
     var registration = new FilterRegistrationBean<PathRewriteFilter>();
-    PathRewriteFilter filter = PathRewriteFilter.builder().removeLeadingPath("/insurance/").build();
+    PathRewriteFilter filter =
+        PathRewriteFilter.builder()
+            .removeLeadingPath("/insurance/")
+            .removeLeadingPath("/services/fhir/v0/")
+            .removeLeadingPath("/fhir/v0/")
+            .build();
     registration.setFilter(filter);
     registration.addUrlPatterns(filter.removeLeadingPathsAsUrlPatterns());
     return registration;
