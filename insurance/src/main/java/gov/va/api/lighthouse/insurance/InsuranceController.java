@@ -128,8 +128,13 @@ public class InsuranceController {
       @RequestParam(value = "patient", required = false) String patient,
       @RequestParam(value = "identifier", required = false) String identifier) {
     checkValidInput(id);
-    checkValidInput(patient);
     checkValidInput(identifier);
+    if ("4044044040V404404".equals(patient)) {
+      throw new HttpClientErrorException(HttpStatus.NOT_FOUND);
+    }
+    if ("5005005000V500500".equals(patient)) {
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
     Coverage coverage = buildCoverage();
     var queryString =
         StubbedQueryStringBuilder.builder()

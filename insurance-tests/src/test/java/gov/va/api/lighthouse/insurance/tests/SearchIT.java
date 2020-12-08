@@ -36,10 +36,6 @@ public class SearchIT {
     checkResponse("Coverage?identifier=" + coverageId, 200, Coverage.Bundle.class);
     checkResponse("Coverage?patient=" + patientId, 200, Coverage.Bundle.class);
     checkResponse("Coverage?_id=I2-404NotFound", 404, OperationOutcome.class);
-    checkResponse("Coverage?identifier=I2-404NotFound", 404, OperationOutcome.class);
-    checkResponse("Coverage?patient=I2-404NotFound", 404, OperationOutcome.class);
-    checkResponse("Coverage?_id=I2-500InternalServerError", 500, OperationOutcome.class);
-    checkResponse("Coverage?identifier=I2-500InternalServerError", 500, OperationOutcome.class);
-    checkResponse("Coverage?patient=I2-500InternalServerError", 500, OperationOutcome.class);
+    checkResponse("Coverage?patient=5005005000V500500", 500, OperationOutcome.class);
   }
 }
