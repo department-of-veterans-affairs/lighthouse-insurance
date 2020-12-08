@@ -24,8 +24,8 @@ public class SearchIT {
   public void searchByCoverageIdTest() {
     final String coverageId = systemDefinition().testIds().coverage();
     checkResponse("Coverage/" + coverageId, 200, Coverage.class);
-    checkResponse("Coverage/NotFoundId", 404, OperationOutcome.class);
-    checkResponse("Coverage/InternalServerErrorId", 500, OperationOutcome.class);
+    checkResponse("Coverage/I2-404NotFound", 404, OperationOutcome.class);
+    checkResponse("Coverage/I2-500InternalServerError", 500, OperationOutcome.class);
   }
 
   @Test
@@ -35,7 +35,11 @@ public class SearchIT {
     checkResponse("Coverage?_id=" + coverageId, 200, Coverage.Bundle.class);
     checkResponse("Coverage?identifier=" + coverageId, 200, Coverage.Bundle.class);
     checkResponse("Coverage?patient=" + patientId, 200, Coverage.Bundle.class);
-    checkResponse("Coverage/NotFoundId", 404, OperationOutcome.class);
-    checkResponse("Coverage/InternalServerErrorId", 500, OperationOutcome.class);
+    checkResponse("Coverage?_id=I2-404NotFound", 404, OperationOutcome.class);
+    checkResponse("Coverage?identifier=I2-404NotFound", 404, OperationOutcome.class);
+    checkResponse("Coverage?patient=I2-404NotFound", 404, OperationOutcome.class);
+    checkResponse("Coverage?_id=I2-500InternalServerError", 500, OperationOutcome.class);
+    checkResponse("Coverage?identifier=I2-500InternalServerError", 500, OperationOutcome.class);
+    checkResponse("Coverage?patient=I2-500InternalServerError", 500, OperationOutcome.class);
   }
 }

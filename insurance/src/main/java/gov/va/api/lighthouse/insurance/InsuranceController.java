@@ -28,7 +28,6 @@ import org.springframework.web.server.ResponseStatusException;
     value = "/r4/Coverage",
     produces = {"application/json", "application/fhir+json"})
 public class InsuranceController {
-
   private final String basepath;
 
   InsuranceController(@Value("${insurance.base-url}") String basepath) {
@@ -106,15 +105,19 @@ public class InsuranceController {
         .build();
   }
 
+  void checkValidInput(String input) {
+    if ("I2-404NotFound".equals(input)) {
+      throw new HttpClientErrorException(HttpStatus.NOT_FOUND);
+    }
+    if ("I2-500InternalServerError".equals(input)) {
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
   /** Read coverage by ID. */
   @GetMapping(value = "/{id}")
   Coverage readCoverageId(@PathVariable("id") String id) {
-    if ("NotFoundId".equals(id)) {
-      throw new HttpClientErrorException(HttpStatus.NOT_FOUND);
-    }
-    if ("InternalServerErrorId".equals(id)) {
-      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+    checkValidInput(id);
     return buildCoverage();
   }
 
@@ -124,12 +127,9 @@ public class InsuranceController {
       @RequestParam(value = "_id", required = false) String id,
       @RequestParam(value = "patient", required = false) String patient,
       @RequestParam(value = "identifier", required = false) String identifier) {
-    if ("NotFoundId".equals(id)) {
-      throw new HttpClientErrorException(HttpStatus.NOT_FOUND);
-    }
-    if ("InternalServerErrorId".equals(id)) {
-      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+    checkValidInput(id);
+    checkValidInput(patient);
+    checkValidInput(identifier);
     Coverage coverage = buildCoverage();
     var queryString =
         StubbedQueryStringBuilder.builder()
@@ -168,7 +168,9 @@ public class InsuranceController {
   @Builder
   public static class StubbedQueryStringBuilder {
     private Optional<String> id;
+
     private Optional<String> pat;
+
     private Optional<String> identifier;
 
     /** Builds a query string representation based on the query params provided. */
