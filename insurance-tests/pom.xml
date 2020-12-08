@@ -9,10 +9,10 @@
   </parent>
   <groupId>gov.va.api.lighthouse</groupId>
   <artifactId>insurance-tests</artifactId>
-  <version>0.0.6-SNAPSHOT</version>
+  <version>0.0.6</version>
   <packaging>jar</packaging>
   <properties>
-    <fhir-resources.version>5.0.15</fhir-resources.version>
+    <fhir-resources.version>5.0.16</fhir-resources.version>
     <docker.imageName>lighthouse-${project.artifactId}</docker.imageName>
     <sentinel.skipLaunch>false</sentinel.skipLaunch>
   </properties>
