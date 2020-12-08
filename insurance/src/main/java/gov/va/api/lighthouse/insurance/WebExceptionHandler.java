@@ -1,17 +1,14 @@
 package gov.va.api.lighthouse.insurance;
 
-import static com.google.common.base.Preconditions.checkState;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.io.JsonEOFException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import gov.va.api.health.autoconfig.configuration.JacksonConfig;
-import gov.va.api.health.autoconfig.encryption.BasicEncryption;
 import gov.va.api.health.r4.api.elements.Extension;
 import gov.va.api.health.r4.api.elements.Narrative;
 import gov.va.api.health.r4.api.resources.OperationOutcome;
@@ -24,7 +21,6 @@ import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,13 +33,6 @@ import org.springframework.web.client.HttpClientErrorException;
 @RequestMapping(produces = {"application/json"})
 public class WebExceptionHandler {
 
-  private final String encryptionKey;
-
-  public WebExceptionHandler(@Value("${insurance.public-web-exception-key}") String encryptionKey) {
-    checkState(!"unset".equals(encryptionKey), "insurance.public-web-exception-key is unset");
-    this.encryptionKey = encryptionKey;
-  }
-
   private static List<Throwable> causes(Throwable tr) {
     List<Throwable> results = new ArrayList<>();
     Throwable current = tr;
@@ -54,17 +43,6 @@ public class WebExceptionHandler {
       }
       results.add(current);
     }
-  }
-
-  private static boolean isJsonError(Throwable tr) {
-    Throwable current = tr;
-    while (current != null) {
-      if (JsonProcessingException.class.isAssignableFrom(current.getClass())) {
-        return true;
-      }
-      current = current.getCause();
-    }
-    return false;
   }
 
   /** Reconstruct a sanitized URL based on the request. */
@@ -132,8 +110,6 @@ public class WebExceptionHandler {
   private List<Extension> extensions(Throwable tr, HttpServletRequest request) {
     List<Extension> extensions = new ArrayList<>(5);
 
-    BasicEncryption encrypter = BasicEncryption.forKey(encryptionKey);
-
     extensions.add(
         Extension.builder().url("timestamp").valueInstant(Instant.now().toString()).build());
 
@@ -141,11 +117,7 @@ public class WebExceptionHandler {
         Extension.builder().url("type").valueString(tr.getClass().getSimpleName()).build());
 
     if (isNotBlank(sanitizedMessage(tr))) {
-      extensions.add(
-          Extension.builder()
-              .url("message")
-              .valueString(encrypter.encrypt(sanitizedMessage(tr)))
-              .build());
+      extensions.add(Extension.builder().url("message").valueString(sanitizedMessage(tr)).build());
     }
 
     String cause =
@@ -153,8 +125,7 @@ public class WebExceptionHandler {
             .map(t -> t.getClass().getSimpleName() + " " + sanitizedMessage(t))
             .collect(Collectors.joining(", "));
     if (isNotBlank(cause)) {
-      extensions.add(
-          Extension.builder().url("cause").valueString(encrypter.encrypt(cause)).build());
+      extensions.add(Extension.builder().url("cause").valueString(cause).build());
     }
 
     extensions.add(Extension.builder().url("request").valueString(reconstructUrl(request)).build());
@@ -176,9 +147,6 @@ public class WebExceptionHandler {
   @ExceptionHandler({Exception.class, UndeclaredThrowableException.class})
   @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
   public OperationOutcome handleSnafu(Exception e, HttpServletRequest request) {
-    if (isJsonError(e)) {
-      return responseFor("database", e, request, emptyList(), false);
-    }
     return responseFor("exception", e, request, emptyList(), true);
   }
 

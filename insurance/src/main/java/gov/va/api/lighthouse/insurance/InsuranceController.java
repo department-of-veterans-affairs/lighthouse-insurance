@@ -109,8 +109,11 @@ public class InsuranceController {
   /** Read coverage by ID. */
   @GetMapping(value = "/{id}")
   Coverage readCoverageId(@PathVariable("id") String id) {
-    if (!"I2-8TQPWFRZ4792KNR6KLYYYHA5RY000289".equals(id)) {
+    if ("NotFoundId".equals(id)) {
       throw new HttpClientErrorException(HttpStatus.NOT_FOUND);
+    }
+    if ("InternalServerErrorId".equals(id)) {
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
     }
     return buildCoverage();
   }
@@ -121,7 +124,10 @@ public class InsuranceController {
       @RequestParam(value = "_id", required = false) String id,
       @RequestParam(value = "patient", required = false) String patient,
       @RequestParam(value = "identifier", required = false) String identifier) {
-    if (id != null && !"I2-8TQPWFRZ4792KNR6KLYYYHA5RY000289".equals(id)) {
+    if ("NotFoundId".equals(id)) {
+      throw new HttpClientErrorException(HttpStatus.NOT_FOUND);
+    }
+    if ("InternalServerErrorId".equals(id)) {
       throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
     }
     Coverage coverage = buildCoverage();
