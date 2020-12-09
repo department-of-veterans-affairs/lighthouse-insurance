@@ -121,10 +121,10 @@ public class InsuranceController {
     if (input == null) {
       return;
     }
-    if (input.startsWith("I2-404NotFound")) {
+    if (input.startsWith("I2-404")) {
       throw new HttpClientErrorException(HttpStatus.NOT_FOUND);
     }
-    if (input.startsWith("I2-500InternalServerError")) {
+    if (input.startsWith("I2-500")) {
       throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }

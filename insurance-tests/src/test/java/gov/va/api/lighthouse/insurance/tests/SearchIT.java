@@ -35,7 +35,7 @@ public class SearchIT {
     checkResponse("Coverage?_id=" + coverageId, 200, Coverage.Bundle.class);
     checkResponse("Coverage?identifier=" + coverageId, 200, Coverage.Bundle.class);
     checkResponse("Coverage?patient=" + patientId, 200, Coverage.Bundle.class);
-    checkResponse("Coverage?_id=I2-404NotFound", 404, OperationOutcome.class);
+    checkResponse("Coverage?_id=I2-404", 404, OperationOutcome.class);
     checkResponse("Coverage?patient=5005005000V500500", 500, OperationOutcome.class);
   }
 }
