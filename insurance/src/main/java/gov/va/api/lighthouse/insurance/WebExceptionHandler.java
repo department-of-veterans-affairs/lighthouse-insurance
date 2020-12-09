@@ -4,10 +4,6 @@ import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.core.io.JsonEOFException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import gov.va.api.health.autoconfig.configuration.JacksonConfig;
 import gov.va.api.health.r4.api.elements.Extension;
 import gov.va.api.health.r4.api.elements.Narrative;
@@ -33,54 +29,11 @@ import org.springframework.web.client.HttpClientErrorException;
 @RequestMapping(produces = {"application/json"})
 public class WebExceptionHandler {
 
-  private static List<Throwable> causes(Throwable tr) {
-    List<Throwable> results = new ArrayList<>();
-    Throwable current = tr;
-    while (true) {
-      current = current.getCause();
-      if (current == null) {
-        return results;
-      }
-      results.add(current);
-    }
-  }
-
   /** Reconstruct a sanitized URL based on the request. */
   private static String reconstructUrl(HttpServletRequest request) {
     return request.getRequestURI()
         + (request.getQueryString() == null ? "" : "?" + request.getQueryString())
             .replaceAll("[\r\n]", "");
-  }
-
-  private static String sanitizedMessage(Throwable tr) {
-    if (tr instanceof MismatchedInputException) {
-      MismatchedInputException mie = (MismatchedInputException) tr;
-      return String.format("path: %s", mie.getPathReference());
-    }
-
-    if (tr instanceof JsonEOFException) {
-      JsonEOFException eofe = (JsonEOFException) tr;
-      if (eofe.getLocation() != null) {
-        return String.format(
-            "line: %s, column: %s",
-            eofe.getLocation().getLineNr(), eofe.getLocation().getColumnNr());
-      }
-    }
-
-    if (tr instanceof JsonMappingException) {
-      JsonMappingException jme = (JsonMappingException) tr;
-      return String.format("path: %s", jme.getPathReference());
-    }
-
-    if (tr instanceof JsonParseException) {
-      JsonParseException jpe = (JsonParseException) tr;
-      if (jpe.getLocation() != null) {
-        return String.format(
-            "line: %s, column: %s", jpe.getLocation().getLineNr(), jpe.getLocation().getColumnNr());
-      }
-    }
-
-    return tr.getMessage();
   }
 
   private OperationOutcome asOperationOutcome(
@@ -115,18 +68,6 @@ public class WebExceptionHandler {
 
     extensions.add(
         Extension.builder().url("type").valueString(tr.getClass().getSimpleName()).build());
-
-    if (isNotBlank(sanitizedMessage(tr))) {
-      extensions.add(Extension.builder().url("message").valueString(sanitizedMessage(tr)).build());
-    }
-
-    String cause =
-        causes(tr).stream()
-            .map(t -> t.getClass().getSimpleName() + " " + sanitizedMessage(t))
-            .collect(Collectors.joining(", "));
-    if (isNotBlank(cause)) {
-      extensions.add(Extension.builder().url("cause").valueString(cause).build());
-    }
 
     extensions.add(Extension.builder().url("request").valueString(reconstructUrl(request)).build());
 
