@@ -14,18 +14,20 @@ import java.util.Optional;
 import lombok.Builder;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping(
     value = "/r4/Coverage",
     produces = {"application/json", "application/fhir+json"})
 public class InsuranceController {
-
   private final String basepath;
 
   InsuranceController(@Value("${insurance.base-url}") String basepath) {
@@ -103,9 +105,34 @@ public class InsuranceController {
         .build();
   }
 
+  void checkValidIcn(String icn) {
+    if (icn == null) {
+      return;
+    }
+    if (icn.startsWith("404")) {
+      throw new HttpClientErrorException(HttpStatus.NOT_FOUND);
+    }
+    if (icn.startsWith("500")) {
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  void checkValidInput(String input) {
+    if (input == null) {
+      return;
+    }
+    if (input.startsWith("I2-404")) {
+      throw new HttpClientErrorException(HttpStatus.NOT_FOUND);
+    }
+    if (input.startsWith("I2-500")) {
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
   /** Read coverage by ID. */
   @GetMapping(value = "/{id}")
   Coverage readCoverageId(@PathVariable("id") String id) {
+    checkValidInput(id);
     return buildCoverage();
   }
 
@@ -115,6 +142,9 @@ public class InsuranceController {
       @RequestParam(value = "_id", required = false) String id,
       @RequestParam(value = "patient", required = false) String patient,
       @RequestParam(value = "identifier", required = false) String identifier) {
+    checkValidInput(id);
+    checkValidInput(identifier);
+    checkValidIcn(patient);
     Coverage coverage = buildCoverage();
     var queryString =
         StubbedQueryStringBuilder.builder()
@@ -153,7 +183,9 @@ public class InsuranceController {
   @Builder
   public static class StubbedQueryStringBuilder {
     private Optional<String> id;
+
     private Optional<String> pat;
+
     private Optional<String> identifier;
 
     /** Builds a query string representation based on the query params provided. */
