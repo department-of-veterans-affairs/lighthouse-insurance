@@ -105,6 +105,15 @@ public class InsuranceController {
         .build();
   }
 
+  void checkValidIcn(String icn) {
+    if ("4044044040V404404".equals(icn)) {
+      throw new HttpClientErrorException(HttpStatus.NOT_FOUND);
+    }
+    if ("5005005000V500500".equals(icn)) {
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
   void checkValidInput(String input) {
     if ("I2-404NotFound".equals(input)) {
       throw new HttpClientErrorException(HttpStatus.NOT_FOUND);
@@ -129,12 +138,7 @@ public class InsuranceController {
       @RequestParam(value = "identifier", required = false) String identifier) {
     checkValidInput(id);
     checkValidInput(identifier);
-    if ("4044044040V404404".equals(patient)) {
-      throw new HttpClientErrorException(HttpStatus.NOT_FOUND);
-    }
-    if ("5005005000V500500".equals(patient)) {
-      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+    checkValidIcn(patient);
     Coverage coverage = buildCoverage();
     var queryString =
         StubbedQueryStringBuilder.builder()
