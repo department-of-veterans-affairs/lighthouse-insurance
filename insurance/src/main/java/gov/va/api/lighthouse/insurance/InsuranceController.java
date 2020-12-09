@@ -106,19 +106,25 @@ public class InsuranceController {
   }
 
   void checkValidIcn(String icn) {
-    if ("4044044040V404404".equals(icn)) {
+    if (icn == null) {
+      return;
+    }
+    if (icn.startsWith("404")) {
       throw new HttpClientErrorException(HttpStatus.NOT_FOUND);
     }
-    if ("5005005000V500500".equals(icn)) {
+    if (icn.startsWith("500")) {
       throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
   void checkValidInput(String input) {
-    if ("I2-404NotFound".equals(input)) {
+    if (input == null) {
+      return;
+    }
+    if (input.startsWith("I2-404NotFound")) {
       throw new HttpClientErrorException(HttpStatus.NOT_FOUND);
     }
-    if ("I2-500InternalServerError".equals(input)) {
+    if (input.startsWith("I2-500InternalServerError")) {
       throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
