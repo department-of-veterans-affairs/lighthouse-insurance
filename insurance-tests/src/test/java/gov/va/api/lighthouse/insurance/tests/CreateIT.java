@@ -13,7 +13,6 @@ import org.junit.jupiter.api.Test;
 public class CreateIT {
 
   public void checkResponse(String endpoint, String body, int expected) {
-    log.info("Verify ");
     TestClient ftc = r4Scheduling();
     String apiPath = ftc.service().urlWithApiPath();
     log.info("Expect POST {} is status ({})", apiPath + endpoint, expected);
