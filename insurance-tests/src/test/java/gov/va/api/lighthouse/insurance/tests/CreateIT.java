@@ -6,13 +6,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import gov.va.api.health.sentinel.ExpectedResponse;
 import gov.va.api.health.sentinel.TestClient;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
+@Slf4j
 public class CreateIT {
 
   public void checkResponse(String endpoint, String body, int expected) {
     TestClient ftc = r4Scheduling();
     String apiPath = ftc.service().urlWithApiPath();
+    log.info("Expect POST {} is status ({})", apiPath + endpoint, expected);
     ExpectedResponse response = ftc.post(apiPath + endpoint, body);
     response.expect(expected);
     assertThat(response.response()).isNotNull();
