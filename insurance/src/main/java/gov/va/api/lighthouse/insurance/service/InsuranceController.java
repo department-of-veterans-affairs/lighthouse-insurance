@@ -1,5 +1,8 @@
 package gov.va.api.lighthouse.insurance.service;
 
+import static gov.va.api.health.autoconfig.configuration.JacksonConfig.createMapper;
+
+import com.fasterxml.jackson.databind.JsonNode;
 import gov.va.api.health.r4.api.bundle.AbstractBundle;
 import gov.va.api.health.r4.api.bundle.BundleLink;
 import gov.va.api.health.r4.api.datatypes.CodeableConcept;
@@ -15,6 +18,7 @@ import java.util.Optional;
 import lombok.Builder;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.json.JsonParseException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -133,6 +137,32 @@ public class InsuranceController {
     }
   }
 
+  void checkValidPostInput(String input) {
+    if (input == null) {
+      return;
+    }
+    if (input.startsWith("I2-500")) {
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  /** Post coverage stub. */
+  @PostMapping()
+  @SneakyThrows
+  public ResponseEntity<Coverage> createCoverage(@RequestBody(required = false) String payload) {
+    Coverage postedCoverage;
+    try {
+      JsonNode jsonNode = createMapper().readTree(payload);
+      postedCoverage = createMapper().convertValue(jsonNode, Coverage.class);
+    } catch (Exception e) {
+      throw new JsonParseException(e);
+    }
+    checkValidPostInput(postedCoverage.id());
+    return ResponseEntity.created(
+            URI.create(basepath + "r4/Coverage/I2-8TQPWFRZ4792KNR6KLYYYHA5RY000289/_history/v0"))
+        .body(postedCoverage);
+  }
+
   /** Read coverage by ID. */
   @GetMapping(value = "/{id}")
   Coverage readCoverageId(@PathVariable("id") String id) {
@@ -182,15 +212,6 @@ public class InsuranceController {
                     .resource(coverage)
                     .build()))
         .build();
-  }
-
-  /** Post coverage stub. */
-  @PostMapping()
-  @SneakyThrows
-  public ResponseEntity<Coverage> validation(@RequestBody Coverage payload) {
-    return ResponseEntity.created(
-            URI.create(basepath + "r4/Coverage/I2-8TQPWFRZ4792KNR6KLYYYHA5RY000289/_history/v0"))
-        .body(payload);
   }
 
   @Builder
