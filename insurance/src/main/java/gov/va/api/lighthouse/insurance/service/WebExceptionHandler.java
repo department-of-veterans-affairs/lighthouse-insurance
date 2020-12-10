@@ -1,4 +1,4 @@
-package gov.va.api.lighthouse.insurance;
+package gov.va.api.lighthouse.insurance.service;
 
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -28,7 +29,6 @@ import org.springframework.web.client.HttpClientErrorException;
 @RestControllerAdvice
 @RequestMapping(produces = {"application/json"})
 public class WebExceptionHandler {
-
   /** Reconstruct a sanitized URL based on the request. */
   private static String reconstructUrl(HttpServletRequest request) {
     return request.getRequestURI()
@@ -62,16 +62,18 @@ public class WebExceptionHandler {
 
   private List<Extension> extensions(Throwable tr, HttpServletRequest request) {
     List<Extension> extensions = new ArrayList<>(5);
-
     extensions.add(
         Extension.builder().url("timestamp").valueInstant(Instant.now().toString()).build());
-
     extensions.add(
         Extension.builder().url("type").valueString(tr.getClass().getSimpleName()).build());
-
     extensions.add(Extension.builder().url("request").valueString(reconstructUrl(request)).build());
-
     return extensions;
+  }
+
+  @ExceptionHandler({HttpMessageNotReadableException.class})
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  public OperationOutcome handleBadRequest(Exception e, HttpServletRequest request) {
+    return responseFor("bad-request", e, request, emptyList(), true);
   }
 
   @ExceptionHandler({HttpClientErrorException.class})

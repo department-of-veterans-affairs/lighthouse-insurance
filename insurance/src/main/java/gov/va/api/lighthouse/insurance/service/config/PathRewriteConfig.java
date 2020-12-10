@@ -1,4 +1,4 @@
-package gov.va.api.lighthouse.insurance.config;
+package gov.va.api.lighthouse.insurance.service.config;
 
 import gov.va.api.health.autoconfig.rest.PathRewriteFilter;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;

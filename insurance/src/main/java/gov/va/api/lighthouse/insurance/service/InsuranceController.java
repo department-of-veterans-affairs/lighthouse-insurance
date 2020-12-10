@@ -1,4 +1,4 @@
-package gov.va.api.lighthouse.insurance;
+package gov.va.api.lighthouse.insurance.service;
 
 import gov.va.api.health.r4.api.bundle.AbstractBundle;
 import gov.va.api.health.r4.api.bundle.BundleLink;
@@ -8,6 +8,7 @@ import gov.va.api.health.r4.api.datatypes.Money;
 import gov.va.api.health.r4.api.elements.Reference;
 import gov.va.api.health.r4.api.resources.Coverage;
 import java.math.BigDecimal;
+import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -15,8 +16,11 @@ import lombok.Builder;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -178,6 +182,15 @@ public class InsuranceController {
                     .resource(coverage)
                     .build()))
         .build();
+  }
+
+  /** Post coverage stub. */
+  @PostMapping()
+  @SneakyThrows
+  public ResponseEntity<Coverage> validation(@RequestBody Coverage payload) {
+    return ResponseEntity.created(
+            URI.create(basepath + "r4/Coverage/I2-8TQPWFRZ4792KNR6KLYYYHA5RY000289/_history/v0"))
+        .body(payload);
   }
 
   @Builder

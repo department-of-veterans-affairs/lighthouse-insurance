@@ -1,5 +1,5 @@
 ====
 
-    ${Ansi.BLUE}Lighthouse ${Ansi.BOLD}${Ansi.ORANGE} Insurance ${Ansi.NORMAL}${Ansi.BLUE}${application.version}${Ansi.NORMAL}
+    ${Ansi.BLUE}Lighthouse ${Ansi.BOLD}${Ansi.YELLOW}Insurance ${Ansi.NORMAL}${Ansi.BLUE}${application.version}${Ansi.NORMAL}
 
 ====
