@@ -1,4 +1,4 @@
-package gov.va.api.lighthouse.insurance.config;
+package gov.va.api.lighthouse.insurance.service.config;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

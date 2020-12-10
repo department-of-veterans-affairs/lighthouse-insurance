@@ -1,5 +1,8 @@
-package gov.va.api.lighthouse.insurance;
+package gov.va.api.lighthouse.insurance.service.controller;
 
+import static gov.va.api.health.autoconfig.configuration.JacksonConfig.createMapper;
+
+import com.fasterxml.jackson.databind.JsonNode;
 import gov.va.api.health.r4.api.bundle.AbstractBundle;
 import gov.va.api.health.r4.api.bundle.BundleLink;
 import gov.va.api.health.r4.api.datatypes.CodeableConcept;
@@ -8,15 +11,20 @@ import gov.va.api.health.r4.api.datatypes.Money;
 import gov.va.api.health.r4.api.elements.Reference;
 import gov.va.api.health.r4.api.resources.Coverage;
 import java.math.BigDecimal;
+import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import lombok.Builder;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.json.JsonParseException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -127,6 +135,32 @@ public class InsuranceController {
     if (input.startsWith("I2-500")) {
       throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
     }
+  }
+
+  void checkValidPostInput(String input) {
+    if (input == null) {
+      return;
+    }
+    if (input.startsWith("I2-500")) {
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  /** Post coverage stub. */
+  @PostMapping()
+  @SneakyThrows
+  public ResponseEntity<Coverage> createCoverage(@RequestBody(required = false) String payload) {
+    Coverage postedCoverage;
+    try {
+      JsonNode jsonNode = createMapper().readTree(payload);
+      postedCoverage = createMapper().convertValue(jsonNode, Coverage.class);
+    } catch (Exception e) {
+      throw new JsonParseException(e);
+    }
+    checkValidPostInput(postedCoverage.id());
+    return ResponseEntity.created(
+            URI.create(basepath + "r4/Coverage/I2-8TQPWFRZ4792KNR6KLYYYHA5RY000289"))
+        .body(postedCoverage);
   }
 
   /** Read coverage by ID. */
