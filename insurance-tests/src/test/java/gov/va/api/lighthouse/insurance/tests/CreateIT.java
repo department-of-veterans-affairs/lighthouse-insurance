@@ -25,7 +25,7 @@ public class CreateIT {
         "Coverage",
         "{\"id\":\"I2-8TQPWFRZ4792KNR6KLYYYHA5RY000289\",\"resourceType\":\"Coverage\"}",
         201);
-    checkResponse("Coverage", "", 400);
+    checkResponse("Coverage", "{ \"abcd\": \"InvalidPayload\" }", 400);
     checkResponse("Coverage", "{\"id\":\"I2-500\",\"resourceType\":\"Coverage\"}", 500);
   }
 }

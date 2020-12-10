@@ -1,4 +1,4 @@
-package gov.va.api.lighthouse.insurance.service;
+package gov.va.api.lighthouse.insurance.service.controller;
 
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;

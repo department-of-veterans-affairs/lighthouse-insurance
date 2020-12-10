@@ -1,4 +1,4 @@
-package gov.va.api.lighthouse.insurance.service;
+package gov.va.api.lighthouse.insurance.service.controller;
 
 import static gov.va.api.health.autoconfig.configuration.JacksonConfig.createMapper;
 
@@ -159,7 +159,7 @@ public class InsuranceController {
     }
     checkValidPostInput(postedCoverage.id());
     return ResponseEntity.created(
-            URI.create(basepath + "r4/Coverage/I2-8TQPWFRZ4792KNR6KLYYYHA5RY000289/_history/v0"))
+            URI.create(basepath + "r4/Coverage/I2-8TQPWFRZ4792KNR6KLYYYHA5RY000289"))
         .body(postedCoverage);
   }
 
