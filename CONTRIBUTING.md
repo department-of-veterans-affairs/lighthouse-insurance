@@ -1,3 +1,4 @@
+<!-- markdownlint-disable MD0013 -->
 <!-- omit in toc -->
 # Contributing to lighthouse-insurance
 
